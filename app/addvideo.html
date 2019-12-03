@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .field-container input {
+                padding: 10px;
+                margin-top: 20px;
+            }
+   
+            .field-container {
+               display: flex;
+               justify-content: center;
+               align-content: center;
+               flex-direction: column;
+               margin: 20px;
+               width: 500px;
+            }
+
+            .header-container ul li {
+                display: inline-flex;
+                flex-direction: row;
+                padding: 8px;
+                margin: 5px;
+                cursor: pointer;
+                background-color: coral;
+                color: #fff;
+            }
+
+         .header-container {
+            background-color: #fff;
+            padding:5px;
+            -webkit-box-shadow: 0 8px 6px -6px black;
+            -moz-box-shadow: 0 8px 6px -6px black;
+            box-shadow: 0 8px 6px -6px black; 
+         }
+
+         .header-container ul li a {
+             text-decoration: none;
+             color: #fff;
+         }
+        </style>
+    </head>
+    <body>
+            <header class="header-container">
+                    <ul>
+                        <li><a href="/">Search Video</a></li>
+                        <li><a href="/addvideo">Add Video</a></li>
+                    </ul>
+            </header>
+            <div class="field-container">
+                    <form action="/add" method="POST">
+                            <div>Name: <input type="text" name="name" placeholder="Name"/></div>
+                            <div>Source: <input type="text" name="source" placeholder="Source"/></div>
+                            <div>Description: <input type="text" name="description" placeholder="Description"/></div>
+                            <div><input type="submit" value="Submit" /></div>
+                    </form>
+            </div>
+    </body>
+</html>

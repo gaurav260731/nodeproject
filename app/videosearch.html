@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+         .usersearch {
+             color: blue;
+             font-size: 20px;
+             font-weight: bold;
+             text-align: center;
+         }
+         .container { 
+             display: block;
+             justify-content: center;
+             align-content: center;
+         }
+         .search-content {
+             border: 1px solid #6cc778;
+             box-shadow: 2px 3px 4px 1px #4c4c4c;
+             margin-top: 20px;
+             padding:10px;
+             text-align:center;
+             font-size: 20px;
+         }
+         .search-container {
+             text-align: center;
+         }
+         .search-container input{
+             padding: 10px;
+         }
+
+         .video-container {
+             display: inline-block;
+             width:500px;
+             height: auto;
+             box-shadow: 2px 3px 2px 1px #ccc;
+             margin-top: 25px;
+             padding: 10px;
+         }
+
+         .header-container ul li {
+            display: inline-flex;
+            flex-direction: row;
+            padding: 8px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: coral;
+            color: #fff;
+         }
+
+         .header-container {
+            background-color: #fff;
+            padding:5px;
+            -webkit-box-shadow: 0 8px 6px -6px black;
+            -moz-box-shadow: 0 8px 6px -6px black;
+            box-shadow: 0 8px 6px -6px black; 
+         }
+
+         .header-container ul li a {
+             text-decoration: none;
+             color: #fff;
+         }
+        </style>
+    </head>
+    <body class="container">
+        <header class="header-container">
+            <ul>
+                <li><a href="/">Search Video</a></li>
+                <li><a href="/addvideo">Add Video</a></li>
+            </ul>
+        </header>
+        <p class="usersearch">Search for Video!</p>
+        <div class="search-container">
+            <input type="text" placeholder="Search" id="search" list="huge_list"/>
+            <datalist id="huge_list">
+                <!-- This data list will be edited through javascript     -->
+            </datalist>
+            <input type="submit" value="Search" onclick = "find()"/>
+        </div>
+
+        <h1>Video Searched</h1>
+        <div id="name">
+        </div>
+        <script>
+            function loadData() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                 var data = JSON.parse(this.responseText);
+
+                 var huge_list = document.getElementById('huge_list');
+
+                 for(i=0;i<data.length;i++) {
+                    //huge_list.innerHTML = "";
+                    var option = document.createElement('option');
+                    option.value = data[i].name;
+                                   
+                    // attach the option to the datalist element
+                    huge_list.appendChild(option);
+                 }
+                 
+                 for(i=0;i<data.length; i++) {
+                    document.querySelector('#name').innerHTML += "<div class='video-container'><video id='videoPlayer' width='500' height='300' controls muted><source src='http://localhost:8091/video/"+data[i].name+"\' type='video/mp4'></video><h4>"+data[i].name+"</h4><p>"+data[i].description+"</p></div>";
+                 }
+                }
+               };
+                xhttp.open("GET", "http://localhost:8091/video/", true);
+                xhttp.send();
+            }
+
+            window.onload = function() {
+                loadData();
+            }
+            
+
+            var submit = document.getElementById("search");
+            submit.addEventListener("keydown", function (e) {
+                if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+                    find();
+                }
+            });
+
+            function find() {
+                var search = document.querySelector('#search').value.toLowerCase();
+                document.querySelector('#name').innerHTML = '';
+                if(search != "") {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            
+                            if(this.responseText != "") { 
+                            
+                                var data = JSON.parse(this.responseText);
+                                document.querySelector('#name').innerHTML += "<div class='search-content'><video id='videoPlayer' controls muted><source src='http://localhost:8091/video/"+data.name+"\' type='video/mp4'></video><h4>"+data.name+"</h4><br><p>"+data.description+"</p></div>"; 
+                            }else {
+                                document.querySelector('#name').innerHTML += "<p style='color:red; font-size:20px; font-weight:bold;'>Oops! User not found.</p>";
+                            }
+                        }
+                    };
+                    xhttp.open("GET", "http://localhost:8091/video/search/"+search, true);
+                    xhttp.send();
+                }else {
+                    document.querySelector('#name').innerHTML += "<p style='color:green;font-size: 20px; font-weight: bold;'>Video Name not found.</p>";
+                }
+            }
+
+            window.addEventListener("load", function(){
+
+                // Add a keyup event listener to our input element
+                var name_input = document.getElementById('search');
+                name_input.addEventListener("keyup", function(event){hinter(event)});
+
+                // create one global XHR object 
+                // so we can abort old requests when a new one is make
+                window.hinterXHR = new XMLHttpRequest();
+                });
+
+                // Autocomplete for form
+                function hinter(event) {
+
+                // retireve the input element
+                var input = event.target;
+
+                // retrieve the datalist element
+                var huge_list = document.getElementById('huge_list');
+
+                // minimum number of characters before we start to generate suggestions
+                var min_characters = 0;
+
+                if (input.value.length < min_characters ) { 
+                    return;
+                } else { 
+
+                    // abort any pending requests
+                    window.hinterXHR.abort();
+
+                    window.hinterXHR.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+
+                            // We're expecting a json response so we convert it to an object
+                            if(this.responseText != '') {
+                                document.querySelector('#name').innerHTML = "";
+                                var response = JSON.parse( this.responseText ); 
+
+                                // clear any previously loaded options in the datalist
+                                //huge_list.innerHTML = "";
+
+                                //response.forEach(function(item) {
+                                    // Create a new <option> element.
+                                    var option = document.createElement('option');
+                                    option.value = response.name;
+                                   
+                                    // attach the option to the datalist element
+                                    //huge_list.appendChild(option);
+                                    document.querySelector('#name').innerHTML = "<div class='search-content'><video id='videoPlayer' controls muted><source src='http://localhost:8091/video/"+response.name+"\' type='video/mp4'></video><h4>"+response.name+"</h4><br><p>"+response.description+"</p></div>"; 
+                                //});
+                            }
+                        }
+                    };
+                    if(input.value != '') {
+                        window.hinterXHR.open("GET", "http://localhost:8091/video/search/" + input.value, true);
+                        window.hinterXHR.send();
+                    }
+                    
+                }
+            }
+        </script>
+    </body>
+</html>
