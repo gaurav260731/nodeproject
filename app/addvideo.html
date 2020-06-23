@@ -48,9 +48,9 @@
                     </ul>
             </header>
             <div class="field-container">
-                    <form action="/add" method="POST">
+                    <form action="/add" method="POST" enctype="multipart/form-data">
                             <div>Name: <input type="text" name="name" placeholder="Name"/></div>
-                            <div>Source: <input type="text" name="source" placeholder="Source"/></div>
+                            <div>Source: <input type="file" name="source" placeholder="Source"/></div>
                             <div>Description: <input type="text" name="description" placeholder="Description"/></div>
                             <div><input type="submit" value="Submit" /></div>
                     </form>

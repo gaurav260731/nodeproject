@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="jquery-3.4.1.min.js"></script>
+        <style>
+         .usersearch {
+             color: blue;
+             font-size: 20px;
+             font-weight: bold;
+             text-align: center;
+         }
+         .container { 
+             display: block;
+             justify-content: center;
+             align-content: center;
+             margin: 30px;
+         }
+         .search-content {
+             border: 1px solid #6cc778;
+             box-shadow: 2px 3px 4px 1px #4c4c4c;
+             margin-top: 20px;
+             padding:10px;
+             text-align:center;
+             font-size: 20px;
+         }
+         .search-container {
+             text-align: center;
+         }
+         .search-container input {
+             padding: 10px;
+         }
+        </style>
+    </head>
+    <body class="container">
+        <p class="usersearch">Search for User!</p>
+        <div class="search-container">
+            <input type="text" placeholder="search" id="search" />
+            <input type="submit" value="Search" onclick = "find()"/>
+        </div>
+
+        <h1>User Detail</h1>
+        <div id="name"></div>
+        <script>
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                 var data = JSON.parse(this.responseText);
+                 console.log(data.employeedetails);
+                 for(i=0;i<data.employeedetails.length; i++) {
+                    document.querySelector('#name').innerHTML += "<div class='search-content'><p>Name :<span>"+data.employeedetails[i].name+"</span> </p><p> Employee Id: "+ data.employeedetails[i].employeeid + "</p><p>Company Name:" + data.employeedetails[i].companyname + "</p></div>";
+                 }
+                }
+            };
+            xhttp.open("GET", "http://localhost:8088/readData", true);
+            xhttp.send();
+
+            var submit = document.getElementById("search");
+            submit.addEventListener("keydown", function (e) {
+                if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+                    find();
+                }
+            });
+
+            function find() {
+                var search = document.querySelector('#search').value.toLowerCase();
+                document.querySelector('#name').innerHTML = '';
+                if(search != "") {
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            if(this.responseText != "") { 
+                                //console.log('getting response'+ this.responseText);
+                                var data = JSON.parse(this.responseText);
+                                //console.log(data.length);
+                                //console.log('search value'+search);
+                                document.querySelector('#name').innerHTML += "<div class='search-content'><p>Name :<span>"+data.name+"</span> </p><p> Employee Id: "+ data.employeeid + "</p><p>Company Name:" + data.companyname + "</p></div>"; 
+                            }else {
+                                document.querySelector('#name').innerHTML += "<p style='color:red; font-size:20px; font-weight:bold;'>Oops! User not found.</p>";
+                            }
+                        }
+                    };
+                    xhttp.open("GET", "http://localhost:8088/"+search, true);
+                    xhttp.send();
+                }else {
+                    document.querySelector('#name').innerHTML += "<p style='color:green;font-size: 20px; font-weight: bold;'>Please enter the User Name.</p>";
+                }
+            }
+        </script>
+    </body>
+</html>

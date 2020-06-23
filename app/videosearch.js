@@ -4,6 +4,8 @@ const path = require('path');
 var fs = require('fs');
 const router = express.Router();
 var bodyparser = require('body-parser');
+var formidable = require('formidable');
+var http = require('http');
 
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
@@ -53,6 +55,16 @@ app.post('/add', function(req, res) {
 
     //res.end("Welcome," + )
     //res.json(obj);
+    // var form = new formidable.IncomingForm();
+    // form.parse(req, function (err, fields, files) {
+    //   var oldpath = files.filetoupload.path;
+    //   var newpath = 'tempupload/' + files.filetoupload.name;
+    //   fs.rename(oldpath, newpath, function (err) {
+    //     if (err) throw err;
+    //     res.end();
+    //   });
+    // });
+    
     res.redirect('/');
 })
 

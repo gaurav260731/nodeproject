@@ -1,0 +1,65 @@
+Nodejs install and express install and use of the API
+Asynchronous Use (like reading and writing the file)
+Read stream
+Write stream
+Read and write stream
+Reading the file data
+Writing the data to the file
+Video Stream
+Video Search
+Use of http request (alternative can be used as express)
+Use of express
+Using the express finding the user name from json data (like a searching)
+Searching the user from the file (file consist json data)
+Creating the calculater application which need to send the number and operation to return the result
+Use of post request API
+--------------------------------------------------------------------------------------------------------------
+Assignment
+Create the application which will display the video, on search it display the suggestion of videos,
+You should also able to add the videos after adding the videos you should be able to see the video on home page.
+----------------------------------------------------------------------------------------------------------------
+
+Use of PUT(update) and DEL(delete) request
+Use of Reservation App where PUT and DELETE are being used
+Use of mongo db to add the form and data stored in mongodb
+Installation of mongodb and mongodb tool (ROBO 3T), where all the schemas and table can be seen.
+Use of Eventemitter
+------------------------------------------------------------------------
+Mongodb
+show dbs
+Use database name (userdetails)
+show tables
+db.userdetail.insert({'employee id':'4', 'username':'Sarita', 'profile':'Network Engineer', 'company':'Cognizant'})
+db.getCollection('userdetail') or db.userdetail.find({})
+db.userdetail.update({'employee id': '1'}, {$set:{'employee id':'2'}})
+db.userdetail.remove({'employee id':'1'});
+db.userdetail.find().limit(1);
+db.userdetail.find().limit(1).skip(2); 
+db.userdetail.find().sort({'employee id': -1}); - To sort it in descending order
+
+
+--------------------------------------------------------------------------
+22.12.2019
+Use of Mongodb
+Promise
+Use of promise story how the workflow
+Async await (Try some example with respect to read or write the file)
+Use multer for file upload 
+Execute all the project of github(Ayush)
+nodemailer to send the mail
+
+-------------------------------------------------------------------------------
+28.12.2019
+Javascript topics
+
+Function closure
+use of let and var
+function scope and local scope
+shallowing
+textin
+deep shallow copy - spread and res
+hoisting
+no function hoisting
+map, filter, find using array
+use of nodejs debugger
+
